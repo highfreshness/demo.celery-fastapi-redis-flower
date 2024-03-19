@@ -1,0 +1,47 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: ./app
+      dockerfile: Dockerfile
+    volumes:
+      - ./app:/app
+    environment:
+      - BROKER_URL=redis://redis
+      - BACKEND_URL=redis://redis
+    ports:
+      - 8000:8000
+
+  redis:
+    image: redis:7-alpine
+    ports: 
+      - 6379:6379
+      
+  worker:
+    build:
+      context: ./celery_worker
+      dockerfile: Dockerfile
+    environment:
+      - BROKER_URL=redis://redis
+      - BACKEND_URL=redis://redis
+    volumes:
+      - ./celery_worker:/app
+    depends_on:
+      - redis
+    restart: always
+
+  flower:
+    build:
+      context: ./flower
+      dockerfile: Dockerfile
+    ports:
+      - 5555:5555
+    volumes:
+      - ./flower:/app
+    environment:
+      - BROKER_URL=redis://redis
+      - BACKEND_URL=redis://redis
+    depends_on:
+      - redis
+      - worker
