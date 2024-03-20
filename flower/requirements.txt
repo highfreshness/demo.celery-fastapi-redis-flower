@@ -1,7 +1,2 @@
-nltk==3.8.1
-transformers==4.38.2
-torch==2.2.1
-torchaudio==2.2.1
-torchvision==0.17.1
 celery[redis]==5.3.6
 flower==2.0.1
