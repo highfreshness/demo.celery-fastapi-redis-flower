@@ -1,17 +1,19 @@
+import os
+import uvicorn
 from fastapi import FastAPI
-from tasks import sentence_summarize
+from tasks import add
+
+PORT = os.getenv("FASTAPI_PORT", "8000")
 
 app = FastAPI()
 
 
 @app.post("/inference")
-async def inference(sentence: str) -> dict:
-    result = sentence_summarize.delay(sentence)  # Redis로 전송
-    summarization = result.get(timeout=10)  # 10초 동안 작업의 완료를 기다림
-    return {"Summarization": summarization}
+def inference(a: int, b: int) -> dict:
+    result = add.delay(a, b)  # Redis로 전송
+    answer = result.get(timeout=30)  # 10초 동안 작업의 완료를 기다림
+    return {"answer": answer}
 
 
-@app.post("/inference_test")
-async def inference_test(sentence: str) -> dict:
-    result = sentence_summarize(sentence)
-    return {"Summarization": result}
+if __name__ == "__main__":
+    uvicorn.run("main:app", host="0.0.0.0", port=int(PORT), log_level="info")
