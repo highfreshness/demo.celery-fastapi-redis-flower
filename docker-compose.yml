@@ -11,12 +11,12 @@ services:
       - BROKER_URL=redis://redis
       - BACKEND_URL=redis://redis
     ports:
-      - 8000:8000
+      - 50601:8000
 
   redis:
     image: redis:7-alpine
     ports: 
-      - 6379:6379
+      - 50603:6379
       
   worker:
     build:
@@ -36,7 +36,7 @@ services:
       context: ./flower
       dockerfile: Dockerfile
     ports:
-      - 5555:5555
+      - 50602:5555
     volumes:
       - ./flower:/app
     environment:
