@@ -6,8 +6,8 @@ app = FastAPI()
 
 
 @app.get("/inference")
-async def inference(a: int, b: int) -> dict:
-    result = await add.delay(a, b)  # Redis로 전송
+def inference(a: int, b: int) -> dict:
+    result = add.delay(a, b)  # Redis로 전송
     answer = result.get(timeout=30)  # 10초 동안 작업의 완료를 기다림
     return {"answer": answer}
 
