@@ -8,7 +8,7 @@ Celery(Worker), FastAPI, Redis(Broker, Backend), Flower(Celery 모니터링)를 
 
 ## 진행 순서
 1. Celery 공식문서의 Getting started 기반으로 구현
-2. 튜토리얼에서는 FastAPI와 Celery worker를 같은 환경에 구현했기 때문에 Docker compose를 이용해 분리된 환경으로 구성
+2. 튜토리얼에서는 FastAPI와 Celery worker를 같은 환경에 구현했지만 모든 기능을 개별환경으로 Docker compose를 이용해 분리 구성
 3. 분리 환경 구성을 기반으로 worker의 수를 늘려 비동기 분산처리 테스트
 4. 부하 테스트는 Apache bench로 수행
 
