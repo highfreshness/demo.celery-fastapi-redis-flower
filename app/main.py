@@ -15,15 +15,15 @@ celery_app = Celery("tasks", broker=BROKER_URL, backend=BACKEND_URL)
 
 @app.get("/inference/id")
 def inference_id(a: int, b: int) -> dict:
+    # ID를 발급 해 사용자가 발급 받은 ID로 결과를 확인(우선 요청을 다 받아두고 background에서 처리)
+    # add_signature = signature("add", args=(a, b), app=celery_app)
+    # task: AsyncResult = add_signature.delay()
+    # return {"Task_ID": task.id}
+
+    # ID 발급을 하지 않고 처리를 기다렸다가 결과를 받는 방법(한번에 worker 수만큼 요청 처리)
     add_signature = signature("add", args=(a, b), app=celery_app)
     task: AsyncResult = add_signature.delay()
-    # 요청 직후 답변 테스트
-    # task_result = AsyncResult(task.id, app=celery_app)
-    # while True:
-    #     if task.state == "SUCCESS":
-    #         break
-    # return {"Task_ID": task.get()}
-    return {"Task_ID": task.id}
+    return {"Task_ID": task.get()}
 
 
 @app.get("/inference/result")
