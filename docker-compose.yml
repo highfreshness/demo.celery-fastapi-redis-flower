@@ -23,6 +23,7 @@ services:
       context: ./celery_worker
       dockerfile: Dockerfile
     environment:
+      - CONCURRENCY=20
       - BROKER_URL=redis://redis
       - BACKEND_URL=redis://redis
     volumes:

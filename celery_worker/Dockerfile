@@ -1,5 +1,9 @@
 FROM python:3.9-slim
 
+ARG CONCURRENCY
+
+ENV CONCURRENCY ${CONCURRENCY}
+
 WORKDIR /app
 
 COPY requirements.txt /app
@@ -9,4 +13,4 @@ RUN pip install --upgrade pip && \
 
 COPY . /app
 
-CMD ["celery", "-A", "tasks", "worker", "--loglevel=INFO"]
+CMD celery -A tasks worker --loglevel=INFO --concurrency=$CONCURRENCY
